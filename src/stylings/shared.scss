@@ -1,0 +1,40 @@
+.fill-space {
+  flex: 1 1 auto;
+}
+
+.flex-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+mat-sidenav-container {
+  .main-content {
+    height: 100%;
+    overflow-y: auto;
+    /*width: 100%;*/
+    flex: 1 1 auto;
+    padding: 30px;
+  }
+
+  .mat-sidenav {
+    width: 240px;
+    box-shadow: var(--primary-shadow);
+    border-right: 1px solid var(--primary-light-2);
+
+    .mat-toolbar {
+      width: 240px;
+      position: relative;
+    }
+  }
+
+  .side-content {
+    overflow-y: hidden;
+    display: flex;
+    height: 100%;
+    flex-flow: column;
+  }
+}
+

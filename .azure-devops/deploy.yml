@@ -1,0 +1,58 @@
+
+trigger:
+  - master
+
+variables:
+- group: office-addin-group
+
+
+stages:
+  - stage: Build
+    displayName: Build Add-In
+    jobs:
+      - job: Build
+        displayName: Build App
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+        - task: NodeTool@0
+          displayName: 'Use Node 16.x'
+          inputs:
+            versionSpec: 16.x
+        - task: Npm@1
+          displayName: 'npm install'
+          inputs:
+            verbose: false
+        - task: Npm@1
+          displayName: 'build client'
+          inputs:
+            command: custom
+            verbose: false
+            customCommand: 'run build'
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: 'dist'
+            artifactName: 'drop'
+
+
+  - stage: Deploy
+    displayName: Deploy Importer.AddIn
+    dependsOn: Build
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    jobs:
+      - deployment: Deploy
+        displayName: Deploy Importer.AddIn
+        environment: Production
+        pool:
+          vmImage: 'ubuntu-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureStaticWebApp@0
+                  inputs:
+                    workingDirectory: '$(Pipeline.Workspace)/drop'
+                    output_location: "./"
+                    skip_app_build: true
+                    skip_api_build: true
+                    azure_static_web_apps_api_token: $(deployment_token)

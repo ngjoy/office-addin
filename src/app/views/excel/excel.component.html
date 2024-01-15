@@ -1,0 +1,44 @@
+
+<ng-container *ngIf="loading$ | async; else done">
+  <div class="flex-centered-content">
+    <matxtnd-loading-message [diameter]="60" [strokeWidth]="5">
+      Loading...
+    </matxtnd-loading-message>
+  </div>
+</ng-container>
+
+<ng-template #done>
+  <mat-sidenav-container fullscreen>
+
+    <mat-sidenav-content class="side-content" >
+
+      <ux-app-toolbar></ux-app-toolbar>
+
+      <div class="main-content">
+        <div class="action-panel">
+          <div class="action">
+            <matxtnd-loading-button class="main-action-btn" mat-raised-button [busy]="busy$ | async" (submit)="applyAction()">
+              <matxtnd-loading-button-ready>
+                Perform Action
+                <mat-icon>task_alt</mat-icon>
+              </matxtnd-loading-button-ready>
+              <matxtnd-loading-button-busy>
+                Working...
+              </matxtnd-loading-button-busy>
+            </matxtnd-loading-button>
+          </div>
+          <div class="action">
+            <button mat-raised-button (click)="approve()">
+              Approve
+              <mat-icon>fact_check</mat-icon>
+              </button>
+          </div>
+        </div>
+      </div>
+
+    </mat-sidenav-content>
+
+
+  </mat-sidenav-container>
+
+</ng-template>
